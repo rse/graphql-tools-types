@@ -86,10 +86,9 @@ GraphQL.graphql(schema, query, null, null, variables).then((result) => {
 }).catch((result) => {
     console.log("ERROR", result)
 })
-
 ```
 
-``
+```sh
 $ npm test
 OK { data:
    { exampleJSON: { foo: 'bar', baz: 42, quux: true },
