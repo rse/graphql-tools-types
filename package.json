@@ -3,7 +3,7 @@
     "version":     "0.9.0",
     "description": "Custom Types for GraphQL-Tools",
     "keywords":    [ "graphql", "graphql-tools", "custom", "types", "json", "uuid" ],
-    "main":        "graphql-tools-types.js",
+    "main":        "graphql-tools-types.js5",
     "repository": {
         "type": "git",
         "url":  "https://github.com/rse/graphql-tools-types.git"
@@ -31,6 +31,6 @@
     },
     "scripts": {
         "test": "jshint --config jshint.json graphql-tools-types.js && babel-node --presets es2015 test.js",
-        "prepublish": "jshint --config jshint.json graphql-tools-types.js"
+        "prepublish": "jshint --config jshint.json graphql-tools-types.js && babel --presets es2015 graphql-tools-types.js >graphql-tools-types.js5"
     }
 }
