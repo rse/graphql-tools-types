@@ -29,7 +29,7 @@ import * as GraphQLLanguage from "graphql/language"
 /*  JSON resolver for GraphQL Tools  */
 const ResolverJSON = {
     /*  serialize value sent as output to the client  */
-    __serialize:  (value) => {
+    __serialize: (value) => {
         /*  no-op as JSON is native output format  */
         return value
     },
@@ -83,13 +83,18 @@ const ResolverJSON = {
 /*  UUID resolver for GraphQL Tools  */
 const ResolverUUID = {
     /*  serialize value sent as output to the client  */
-    __serialize:  (value) => {
+    __serialize: (value) => {
         return value.format()
     },
 
     /*  parse value received as input from client  */
     __parseValue: (value) => {
-        return new UUID(value)
+        if (typeof value === "string")
+            return new UUID(value)
+        else if (typeof value === "object" && value instanceof UUID)
+            return value
+        else
+            throw new Error(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
     },
 
     /*  parse value received as literal in AST  */
@@ -101,9 +106,35 @@ const ResolverUUID = {
     }
 }
 
+const ResolverDate = {
+    /*  serialize value sent as output to the client  */
+    __serialize: (value) => {
+        return value.toISOString()
+    },
+
+    /*  parse value received as input from client  */
+    __parseValue: (value) => {
+        if (typeof value === "string")
+            return new Date(value)
+        else if (typeof value === "object" && value instanceof Date)
+            return value
+        else
+            throw new Error(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
+    },
+
+    /*  parse value received as literal in AST  */
+    __parseLiteral: (ast) => {
+        if (ast.kind !== GraphQLLanguage.Kind.STRING)
+            throw new Error(`[graphql-tools-types] invalid Date literal (string expected)`)
+        let value = GraphQL.GraphQLString.parseLiteral(ast)
+        return new Date(value)
+    }
+}
+
 /*  export the methods  */
 module.exports = {
     ResolverJSON: ResolverJSON,
-    ResolverUUID: ResolverUUID
+    ResolverUUID: ResolverUUID,
+    ResolverDate: ResolverDate
 }
 
