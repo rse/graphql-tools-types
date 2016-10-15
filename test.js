@@ -12,18 +12,27 @@ let definition = `
     scalar UUID
     scalar Date
     scalar Void
+    scalar MyInt
+    scalar MyFloat
+    scalar MyString
     type RootQuery {
         exampleJSON(json1: JSON, json2: JSON): JSON
         exampleUUID(uuid1: UUID, uuid2: UUID): UUID
         exampleDate(date1: Date, date2: Date): Date
         exampleVoid: Void
+        exampleMyInt(num: MyInt): Int
+        exampleMyFloat(num: MyFloat): Float
+        exampleMyString(str: MyString): String
     }
 `
 let resolvers = {
-    JSON: GraphQLToolsTypes.ResolverJSON,
-    UUID: GraphQLToolsTypes.ResolverUUID,
-    Date: GraphQLToolsTypes.ResolverDate,
-    Void: GraphQLToolsTypes.ResolverVoid,
+    JSON:     GraphQLToolsTypes.ResolverJSON,
+    UUID:     GraphQLToolsTypes.ResolverUUID,
+    Date:     GraphQLToolsTypes.ResolverDate,
+    Void:     GraphQLToolsTypes.ResolverVoid,
+    MyInt:    GraphQLToolsTypes.ResolverIntFactory({ name: "MyInt", min: 0, max: 100 }),
+    MyFloat:  GraphQLToolsTypes.ResolverFloatFactory({ name: "MyFloat", min: 0.0, max: 100.0 }),
+    MyString: GraphQLToolsTypes.ResolverStringFactory({ name: "MyString", regex: /^(?:foo|bar|quux)$/ }),
     RootQuery: {
         exampleJSON: (root, args, ctx, info) => {
             return args.json1
@@ -36,6 +45,15 @@ let resolvers = {
         },
         exampleVoid: (root, args, ctx, info) => {
             return {}
+        },
+        exampleMyInt: (root, args, ctx, info) => {
+            return args.num
+        },
+        exampleMyFloat: (root, args, ctx, info) => {
+            return args.num
+        },
+        exampleMyString: (root, args, ctx, info) => {
+            return args.str
         }
     }
 }
@@ -48,7 +66,10 @@ let query = `
         exampleJSON(json1: $json, json2: { foo: "bar", baz: 42, quux: true }),
         exampleUUID(uuid1: $uuid, uuid2: "6cbe657c-63e3-11e6-aa83-080027e303e4"),
         exampleDate(date1: $date, date2: "2016-08-16T00:01:02.000Z"),
-        exampleVoid
+        exampleVoid,
+        exampleMyInt(num: 100),
+        exampleMyFloat(num: 100.0),
+        exampleMyString(str: "xxx")
     }
 `
 let variables = {
