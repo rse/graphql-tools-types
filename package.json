@@ -1,6 +1,6 @@
 {
     "name":        "graphql-tools-types",
-    "version":     "0.9.0",
+    "version":     "0.9.1",
     "description": "Custom Types for GraphQL-Tools",
     "keywords":    [ "graphql", "graphql-tools", "custom", "types", "json", "uuid" ],
     "main":        "graphql-tools-types.js5",
@@ -21,13 +21,13 @@
     "bugs":     "https://github.com/rse/graphql-tools-types/issues",
     "dependencies": {
         "pure-uuid":            "~1.4.0",
-        "graphql":              "~0.6.2"
+        "graphql":              "~0.7.2"
     },
     "devDependencies": {
-        "graphql-tools":        "~0.6.4",
-        "jshint":               "~2.9.2",
-        "babel-cli":            "~6.11.4",
-        "babel-preset-es2015":  "~6.13.2"
+        "graphql-tools":        "~0.7.2",
+        "jshint":               "~2.9.3",
+        "babel-cli":            "~6.16.0",
+        "babel-preset-es2015":  "~6.16.0"
     },
     "scripts": {
         "test": "jshint --config jshint.json graphql-tools-types.js && babel-node --presets es2015 test.js",
