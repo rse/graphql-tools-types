@@ -1,6 +1,6 @@
 {
     "name":        "graphql-tools-types",
-    "version":     "0.9.1",
+    "version":     "0.9.2",
     "description": "Custom Types for GraphQL-Tools",
     "keywords":    [ "graphql", "graphql-tools", "custom", "types", "json", "uuid" ],
     "main":        "graphql-tools-types.js5",
