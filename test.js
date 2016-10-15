@@ -68,8 +68,8 @@ let query = `
         exampleDate(date1: $date, date2: "2016-08-16T00:01:02.000Z"),
         exampleVoid,
         exampleMyInt(num: 100),
-        exampleMyFloat(num: 100.0),
-        exampleMyString(str: "xxx")
+        exampleMyFloat(num: 42.7),
+        exampleMyString(str: "foo")
     }
 `
 let variables = {
