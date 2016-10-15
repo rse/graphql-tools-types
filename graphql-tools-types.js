@@ -25,7 +25,7 @@
 import UUID                 from "pure-uuid"
 import * as GraphQL         from "graphql"
 import * as GraphQLLanguage from "graphql/language"
-import GraphQLError         from "graphql/error"
+import { GraphQLError }     from "graphql/error"
 
 /*  JSON resolver for GraphQL Tools  */
 const ResolverJSON = {
@@ -95,7 +95,7 @@ const ResolverUUID = {
         else if (typeof value === "object" && value instanceof UUID)
             return value
         else
-            throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
+            throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`, [])
     },
 
     /*  parse value received as literal in AST  */
@@ -121,7 +121,7 @@ const ResolverDate = {
         else if (typeof value === "object" && value instanceof Date)
             return value
         else
-            throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
+            throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`, [])
     },
 
     /*  parse value received as literal in AST  */
@@ -145,7 +145,7 @@ const ResolverVoid = {
         if (typeof value === "object")
             return {}
         else
-            throw new GraphQLError(`[graphql-tools-types] invalid Void input value (string or number)`)
+            throw new GraphQLError(`[graphql-tools-types] invalid Void input value (string or number)`, [])
     },
 
     /*  parse value received as literal in AST  */
@@ -160,11 +160,14 @@ const ResolverVoid = {
 const ResolverIntFactory = (options) => {
     const validate = (value, ast = null) => {
         if (options.min !== undefined && value < options.min)
-            throw new GraphQLError(`[graphql-tools-types] ${options.name}: minimum value is ${options.min}`, [ ast ])
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `minimum value is ${options.min}`, ast !== null ? [ ast ] : [])
         if (options.max !== undefined && value > options.max)
-            throw new GraphQLError(`[graphql-tools-types] ${options.name}: maximum value is ${options.max}`, [ ast ])
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `maximum value is ${options.max}`, ast !== null ? [ ast ] : [])
         if (options.fn !== undefined && !options.fn(value))
-            throw new GraphQLError(`[graphql-tools-types] ${options.name}: value not valid`, [ ast ])
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `value not valid`, ast !== null ? [ ast ] : [])
     }
     return {
         /*  serialize value sent as output to the client  */
@@ -177,7 +180,7 @@ const ResolverIntFactory = (options) => {
             if (typeof value === "string")
                 value = parseInt(value, 10)
             else if (typeof value !== "number")
-                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid input value (type "number" expected)`)
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid input value (type "number" expected)`, [])
             validate(value)
             return value
         },
@@ -187,7 +190,7 @@ const ResolverIntFactory = (options) => {
             if (ast.kind !== GraphQLLanguage.Kind.INT)
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid AST node (kind "INT" expected)`, [ ast ])
             let value = GraphQL.GraphQLInt.parseLiteral(ast)
-            validate(value)
+            validate(value, ast)
             return value
         }
     }
@@ -196,11 +199,14 @@ const ResolverIntFactory = (options) => {
 const ResolverFloatFactory = (options) => {
     const validate = (value, ast) => {
         if (options.min !== undefined && value < options.min)
-            throw new GraphQLError(`[graphql-tools-types] ${options.name}: minimum value is ${options.min}`, [ ast ])
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `minimum value is ${options.min}`, ast !== null ? [ ast ] : [])
         if (options.max !== undefined && value > options.max)
-            throw new GraphQLError(`[graphql-tools-types] ${options.name}: maximum value is ${options.max}`, [ ast ])
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `maximum value is ${options.max}`, ast !== null ? [ ast ] : [])
         if (options.fn !== undefined && !options.fn(value))
-            throw new GraphQLError(`[graphql-tools-types] ${options.name}: value not valid`, [ ast ])
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `value not valid`, ast !== null ? [ ast ] : [])
     }
     return {
         /*  serialize value sent as output to the client  */
@@ -213,7 +219,7 @@ const ResolverFloatFactory = (options) => {
             if (typeof value === "string")
                 value = parseFloat(value)
             else if (typeof value !== "number")
-                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid input value (type "number" expected)`)
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid input value (type "number" expected)`, [])
             validate(value)
             return value
         },
@@ -223,7 +229,7 @@ const ResolverFloatFactory = (options) => {
             if (ast.kind !== GraphQLLanguage.Kind.FLOAT)
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid AST node (kind "FLOAT" expected)`, [ ast ])
             let value = GraphQL.GraphQLInt.parseLiteral(ast)
-            validate(value)
+            validate(value, ast)
             return value
         }
     }
@@ -254,7 +260,7 @@ const ResolverStringFactory = (options) => {
         __parseValue: (value) => {
             if (typeof value !== "string")
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
-                    `invalid input value (type "string" expected)`)
+                    `invalid input value (type "string" expected)`, [])
             validate(value)
             return value
         },
