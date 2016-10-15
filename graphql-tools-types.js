@@ -245,7 +245,7 @@ const ResolverStringFactory = (options) => {
                 `maximum length is ${options.max}`, ast !== null ? [ ast ] : [])
         if (options.regex !== undefined && !options.regex.test(value))
             throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
-                `value not valid`, ast !== null ? [ ast ] : [])
+                `value does not match ${options.regex}`, ast !== null ? [ ast ] : [])
         if (options.fn !== undefined && !options.fn(value))
             throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                 `value not valid`, ast !== null ? [ ast ] : [])
