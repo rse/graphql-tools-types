@@ -25,6 +25,7 @@
 import UUID                 from "pure-uuid"
 import * as GraphQL         from "graphql"
 import * as GraphQLLanguage from "graphql/language"
+import GraphQLError         from "graphql/error"
 
 /*  JSON resolver for GraphQL Tools  */
 const ResolverJSON = {
@@ -54,12 +55,12 @@ const ResolverJSON = {
                         return GraphQL.GraphQLString.parseLiteral(ast)
                     case GraphQLLanguage.Kind.FLOAT:
                         return GraphQL.GraphQLFloat.parseLiteral(ast)
+                    case GraphQLLanguage.Kind.ENUM:
+                        return String(ast.value)
                     case GraphQLLanguage.Kind.LIST:
                         return ast.values.map((astItem) => {
                             return parseJSONLiteral(astItem) /* RECURSION */
                         })
-                    case GraphQLLanguage.Kind.ENUM:
-                        return String(ast.value)
                     case GraphQLLanguage.Kind.OBJECT: {
                         const value = Object.create(null)
                         ast.fields.forEach((field) => {
@@ -74,7 +75,7 @@ const ResolverJSON = {
             result = parseJSONLiteral(ast)
         }
         catch (ex) {
-            throw new Error(`[graphql-tools-types] error parsing JSON: ${ex.toString()}`)
+            throw new GraphQLError(`[graphql-tools-types] error parsing JSON: ${ex.toString()}`, [ ast ])
         }
         return result
     }
@@ -94,15 +95,16 @@ const ResolverUUID = {
         else if (typeof value === "object" && value instanceof UUID)
             return value
         else
-            throw new Error(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
+            throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
     },
 
     /*  parse value received as literal in AST  */
     __parseLiteral: (ast) => {
         if (ast.kind !== GraphQLLanguage.Kind.STRING)
-            throw new Error(`[graphql-tools-types] invalid UUID literal (string expected)`)
+            throw new GraphQLError(`[graphql-tools-types] invalid UUID literal (string expected)`, [ ast ])
         let value = GraphQL.GraphQLString.parseLiteral(ast)
-        return new UUID(value)
+        value = new UUID(value)
+        return value
     }
 }
 
@@ -119,22 +121,164 @@ const ResolverDate = {
         else if (typeof value === "object" && value instanceof Date)
             return value
         else
-            throw new Error(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
+            throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`)
     },
 
     /*  parse value received as literal in AST  */
     __parseLiteral: (ast) => {
         if (ast.kind !== GraphQLLanguage.Kind.STRING)
-            throw new Error(`[graphql-tools-types] invalid Date literal (string expected)`)
+            throw new GraphQLError(`[graphql-tools-types] invalid Date literal (string expected)`, [ ast ])
         let value = GraphQL.GraphQLString.parseLiteral(ast)
-        return new Date(value)
+        value = new Date(value)
+        return value
+    }
+}
+
+const ResolverVoid = {
+    /*  serialize value sent as output to the client  */
+    __serialize: (/* value */) => {
+        return {}
+    },
+
+    /*  parse value received as input from client  */
+    __parseValue: (value) => {
+        if (typeof value === "object")
+            return {}
+        else
+            throw new GraphQLError(`[graphql-tools-types] invalid Void input value (string or number)`)
+    },
+
+    /*  parse value received as literal in AST  */
+    __parseLiteral: (ast) => {
+        if (ast.kind !== GraphQLLanguage.Kind.OBJECT)
+            throw new GraphQLError(`[graphql-tools-types] invalid Void literal (Object expected)`, [ ast ])
+        let value = {}
+        return value
+    }
+}
+
+const ResolverIntFactory = (options) => {
+    const validate = (value) => {
+        if (options.min !== undefined && value < options.min)
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: minimum value is ${options.min}`, [ ast ])
+        if (options.max !== undefined && value > options.max)
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: maximum value is ${options.max}`, [ ast ])
+        if (options.fn !== undefined && !options.fn(value))
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: value not valid`, [ ast ])
+    }
+    return {
+        /*  serialize value sent as output to the client  */
+        __serialize: (value) => {
+            return value
+        },
+
+        /*  parse value received as input from client  */
+        __parseValue: (value) => {
+            if (typeof value === "string")
+                value = parseInt(value, 10)
+            else if (typeof value !== "number")
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid input value (type "number" expected)`)
+            validate(value)
+            return value
+        },
+
+        /*  parse value received as literal in AST  */
+        __parseLiteral: (ast) => {
+            if (ast.kind !== GraphQLLanguage.Kind.INT)
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid AST node (kind "INT" expected)`, [ ast ])
+            let value = GraphQL.GraphQLInt.parseLiteral(ast)
+            validate(value)
+            return value
+        }
+    }
+}
+
+const ResolverFloatFactory = (options) => {
+    const validate = (value, ast) => {
+        if (options.min !== undefined && value < options.min)
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: minimum value is ${options.min}`, [ ast ])
+        if (options.max !== undefined && value > options.max)
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: maximum value is ${options.max}`, [ ast ])
+        if (options.fn !== undefined && !options.fn(value))
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: value not valid`, [ ast ])
+    }
+    return {
+        /*  serialize value sent as output to the client  */
+        __serialize: (value) => {
+            return value
+        },
+
+        /*  parse value received as input from client  */
+        __parseValue: (value) => {
+            if (typeof value === "string")
+                value = parseFloat(value)
+            else if (typeof value !== "number")
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid input value (type "number" expected)`)
+            validate(value)
+            return value
+        },
+
+        /*  parse value received as literal in AST  */
+        __parseLiteral: (ast) => {
+            if (ast.kind !== GraphQLLanguage.Kind.FLOAT)
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid AST node (kind "FLOAT" expected)`, [ ast ])
+            let value = GraphQL.GraphQLInt.parseLiteral(ast)
+            validate(value)
+            return value
+        }
+    }
+}
+
+const ResolverStringFactory = (options) => {
+    const validate = (value, ast = null) => {
+        if (options.min !== undefined && value.length < options.min)
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `minimum length is ${options.min}`, ast !== null ? [ ast ] : [])
+        if (options.max !== undefined && value.length > options.max)
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `maximum length is ${options.max}`, ast !== null ? [ ast ] : [])
+        if (options.regex !== undefined && !options.regex.test(value))
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `value not valid`, ast !== null ? [ ast ] : [])
+        if (options.fn !== undefined && !options.fn(value))
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `value not valid`, ast !== null ? [ ast ] : [])
+    }
+    return {
+        /*  serialize value sent as output to the client  */
+        __serialize: (value) => {
+            return value
+        },
+
+        /*  parse value received as input from client  */
+        __parseValue: (value) => {
+            if (typeof value !== "string")
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                    `invalid input value (type "string" expected)`)
+            validate(value)
+            return value
+        },
+
+        /*  parse value received as literal in AST  */
+        __parseLiteral: (ast) => {
+            if (ast.kind !== GraphQLLanguage.Kind.STRING)
+                throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                    `invalid AST node (kind "STRING" expected)`, [ ast ])
+            let value = GraphQL.GraphQLString.parseLiteral(ast)
+            validate(value, ast)
+            return value
+        }
     }
 }
 
 /*  export the methods  */
 module.exports = {
-    ResolverJSON: ResolverJSON,
-    ResolverUUID: ResolverUUID,
-    ResolverDate: ResolverDate
+    ResolverJSON:          ResolverJSON,
+    ResolverUUID:          ResolverUUID,
+    ResolverDate:          ResolverDate,
+    ResolverVoid:          ResolverVoid,
+    ResolverIntFactory:    ResolverIntFactory,
+    ResolverFloatFactory:  ResolverFloatFactory,
+    ResolverStringFactory: ResolverStringFactory
 }
 
