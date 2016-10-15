@@ -228,7 +228,7 @@ const ResolverFloatFactory = (options) => {
         __parseLiteral: (ast) => {
             if (ast.kind !== GraphQLLanguage.Kind.FLOAT)
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: invalid AST node (kind "FLOAT" expected)`, [ ast ])
-            let value = GraphQL.GraphQLInt.parseLiteral(ast)
+            let value = GraphQL.GraphQLFloat.parseLiteral(ast)
             validate(value, ast)
             return value
         }
