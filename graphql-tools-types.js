@@ -158,7 +158,7 @@ const ResolverVoid = {
 }
 
 const ResolverIntFactory = (options) => {
-    const validate = (value) => {
+    const validate = (value, ast = null) => {
         if (options.min !== undefined && value < options.min)
             throw new GraphQLError(`[graphql-tools-types] ${options.name}: minimum value is ${options.min}`, [ ast ])
         if (options.max !== undefined && value > options.max)
