@@ -22,6 +22,7 @@
 **  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/*  external requirements  */
 import UUID                 from "pure-uuid"
 import * as GraphQL         from "graphql"
 import * as GraphQLLanguage from "graphql/language"
@@ -108,6 +109,7 @@ const ResolverUUID = {
     }
 }
 
+/*  Date resolver for GraphQL Tools  */
 const ResolverDate = {
     /*  serialize value sent as output to the client  */
     __serialize: (value) => {
@@ -134,6 +136,7 @@ const ResolverDate = {
     }
 }
 
+/*  Void resolver for GraphQL Tools  */
 const ResolverVoid = {
     /*  serialize value sent as output to the client  */
     __serialize: (/* value */) => {
@@ -157,6 +160,57 @@ const ResolverVoid = {
     }
 }
 
+/*  UUID resolver factory for GraphQL Tools  */
+const ResolverUUIDFactory = (options) => {
+    if (options.storage === undefined)
+        options.storage = "binary"
+    const validate = (value, ast = null) => {
+        if (options.fn !== undefined && !options.fn(value))
+            throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                `value not valid`, ast !== null ? [ ast ] : [])
+    }
+    return {
+        /*  serialize value sent as output to the client  */
+        __serialize: (value) => {
+            return (options.storage === "binary" ? value.format() : value)
+        },
+
+        /*  parse value received as input from client  */
+        __parseValue: (value) => {
+            if (typeof value !== "string")
+                throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string expected)`, [])
+            try {
+                value = new UUID(value)
+            }
+            catch (ex) {
+                throw new GraphQLError(`[graphql-tools-types] invalid UUID string representation`, [])
+            }
+            if (options.storage === "string")
+                value = value.format()
+            validate(value)
+            return value
+        },
+
+        /*  parse value received as literal in AST  */
+        __parseLiteral: (ast) => {
+            if (ast.kind !== GraphQLLanguage.Kind.STRING)
+                throw new GraphQLError(`[graphql-tools-types] invalid UUID literal (string expected)`, [ ast ])
+            let value = GraphQL.GraphQLString.parseLiteral(ast)
+            try {
+                value = new UUID(value)
+            }
+            catch (ex) {
+                throw new GraphQLError(`[graphql-tools-types] invalid UUID string representation`, [ ast ])
+            }
+            if (options.storage === "string")
+                value = value.format()
+            validate(value, ast)
+            return value
+        }
+    }
+}
+
+/*  Integer resolver factory for GraphQL Tools  */
 const ResolverIntFactory = (options) => {
     const validate = (value, ast = null) => {
         if (options.min !== undefined && value < options.min)
@@ -196,6 +250,7 @@ const ResolverIntFactory = (options) => {
     }
 }
 
+/*  Float resolver factory for GraphQL Tools  */
 const ResolverFloatFactory = (options) => {
     const validate = (value, ast) => {
         if (options.min !== undefined && value < options.min)
@@ -235,6 +290,7 @@ const ResolverFloatFactory = (options) => {
     }
 }
 
+/*  String resolver factory for GraphQL Tools  */
 const ResolverStringFactory = (options) => {
     const validate = (value, ast = null) => {
         if (options.min !== undefined && value.length < options.min)
@@ -283,6 +339,7 @@ module.exports = {
     ResolverUUID:          ResolverUUID,
     ResolverDate:          ResolverDate,
     ResolverVoid:          ResolverVoid,
+    ResolverUUIDFactory:   ResolverUUIDFactory,
     ResolverIntFactory:    ResolverIntFactory,
     ResolverFloatFactory:  ResolverFloatFactory,
     ResolverStringFactory: ResolverStringFactory
