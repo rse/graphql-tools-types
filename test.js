@@ -8,41 +8,32 @@ let definition = `
     schema {
         query: RootQuery
     }
-    scalar JSON
-    scalar UUID
-    scalar Date
     scalar Void
     scalar MyInt
     scalar MyFloat
     scalar MyString
+    scalar Date
+    scalar UUID
+    scalar JSON
     type RootQuery {
-        exampleJSON(json1: JSON, json2: JSON): JSON
-        exampleUUID(uuid1: UUID, uuid2: UUID): UUID
-        exampleDate(date1: Date, date2: Date): Date
         exampleVoid: Void
         exampleMyInt(num: MyInt): Int
         exampleMyFloat(num: MyFloat): Float
         exampleMyString(str: MyString): String
+        exampleDate(date1: Date, date2: Date): Date
+        exampleUUID(uuid1: UUID, uuid2: UUID): UUID
+        exampleJSON(json1: JSON, json2: JSON): JSON
     }
 `
 let resolvers = {
-    JSON:     GraphQLToolsTypes.ResolverJSON(),
-    UUID:     GraphQLToolsTypes.ResolverUUID(),
-    Date:     GraphQLToolsTypes.ResolverDate(),
-    Void:     GraphQLToolsTypes.ResolverVoid(),
+    Void:     GraphQLToolsTypes.ResolverVoid({ name: "MyVoid" }),
     MyInt:    GraphQLToolsTypes.ResolverInt({ name: "MyInt", min: 0, max: 100 }),
     MyFloat:  GraphQLToolsTypes.ResolverFloat({ name: "MyFloat", min: 0.0, max: 100.0 }),
     MyString: GraphQLToolsTypes.ResolverString({ name: "MyString", regex: /^(?:foo|bar|quux)$/ }),
+    Date:     GraphQLToolsTypes.ResolverDate({ name: "MyDate" }),
+    UUID:     GraphQLToolsTypes.ResolverUUID({ name: "MyUUID" }),
+    JSON:     GraphQLToolsTypes.ResolverJSON({ name: "MyJSON" }),
     RootQuery: {
-        exampleJSON: (root, args, ctx, info) => {
-            return args.json1
-        },
-        exampleUUID: (root, args, ctx, info) => {
-            return args.uuid1
-        },
-        exampleDate: (root, args, ctx, info) => {
-            return args.date1
-        },
         exampleVoid: (root, args, ctx, info) => {
             return {}
         },
@@ -54,6 +45,15 @@ let resolvers = {
         },
         exampleMyString: (root, args, ctx, info) => {
             return args.str
+        },
+        exampleDate: (root, args, ctx, info) => {
+            return args.date1
+        },
+        exampleUUID: (root, args, ctx, info) => {
+            return args.uuid1
+        },
+        exampleJSON: (root, args, ctx, info) => {
+            return args.json1
         }
     }
 }
@@ -63,13 +63,13 @@ let schema = GraphQLTools.makeExecutableSchema({
 })
 let query = `
     query ($json: JSON, $uuid: UUID, $date: Date) {
-        exampleJSON(json1: $json, json2: { foo: "bar", baz: 42, quux: true }),
-        exampleUUID(uuid1: $uuid, uuid2: "6cbe657c-63e3-11e6-aa83-080027e303e4"),
-        exampleDate(date1: $date, date2: "2016-08-16T00:01:02.000Z"),
         exampleVoid,
         exampleMyInt(num: 100),
         exampleMyFloat(num: 42.7),
         exampleMyString(str: "foo")
+        exampleDate(date1: $date, date2: "2016-08-16T00:01:02.000Z"),
+        exampleUUID(uuid1: $uuid, uuid2: "6cbe657c-63e3-11e6-aa83-080027e303e4"),
+        exampleJSON(json1: $json, json2: { foo: "bar", baz: 42, quux: true }),
     }
 `
 let variables = {
