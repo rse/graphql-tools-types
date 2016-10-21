@@ -118,12 +118,16 @@ const ResolverDate = {
 
     /*  parse value received as input from client  */
     __parseValue: (value) => {
-        if (typeof value === "string")
-            return new Date(value)
+        if (typeof value === "string") {
+            let value = new Date(value)
+            if (isNaN(value.getTime()))
+                throw new GraphQLError(`[graphql-tools-types] invalid Date input value`, [])
+            return value
+        }
         else if (typeof value === "object" && value instanceof Date)
             return value
         else
-            throw new GraphQLError(`[graphql-tools-types] invalid UUID input value (string or [Pure]UUID expected)`, [])
+            throw new GraphQLError(`[graphql-tools-types] invalid Date input value (string or Date expected)`, [])
     },
 
     /*  parse value received as literal in AST  */
@@ -132,6 +136,8 @@ const ResolverDate = {
             throw new GraphQLError(`[graphql-tools-types] invalid Date literal (string expected)`, [ ast ])
         let value = GraphQL.GraphQLString.parseLiteral(ast)
         value = new Date(value)
+        if (isNaN(value.getTime()))
+            throw new GraphQLError(`[graphql-tools-types] invalid Date input value`, [])
         return value
     }
 }
