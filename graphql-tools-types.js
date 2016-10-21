@@ -282,7 +282,7 @@ const ResolverUUID = (options = {}) => {
 }
 
 /*  JSON resolver for GraphQL Tools  */
-const ResolverJSON = (options = {}) => {
+const ResolverJSON = (/* options = {} */) => {
     return {
         /*  serialize value sent as output to the client  */
         __serialize: (value) => {
