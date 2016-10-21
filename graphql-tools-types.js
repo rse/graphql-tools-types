@@ -211,7 +211,7 @@ const ResolverDate = (options = {}) => {
         /*  parse value received as input from client  */
         __parseValue: (value) => {
             if (typeof value === "string") {
-                let value = new Date(value)
+                value = new Date(value)
                 if (isNaN(value.getTime()))
                     throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                         `invalid Date input value`, [])
