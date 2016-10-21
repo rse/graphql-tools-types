@@ -23,6 +23,7 @@
 */
 
 /*  external requirements  */
+import Ducky                from "ducky"
 import UUID                 from "pure-uuid"
 import * as GraphQL         from "graphql"
 import * as GraphQLLanguage from "graphql/language"
@@ -30,6 +31,10 @@ import { GraphQLError }     from "graphql/error"
 
 /*  Void resolver for GraphQL Tools  */
 const ResolverVoid = (options = {}) => {
+    let errors = []
+    if (!Ducky.validate(options, `{ name: string, value?: any }`, errors))
+        throw new GraphQLError(`[graphql-tools-types] ` +
+            `invalid parameters: {errors.join("; ")}`, [])
     if (options.value === undefined)
         options.value = {}
     return {
@@ -60,6 +65,10 @@ const ResolverVoid = (options = {}) => {
 
 /*  Integer resolver for GraphQL Tools  */
 const ResolverInt = (options = {}) => {
+    let errors = []
+    if (!Ducky.validate(options, `{ name: string, min?: number, max?: number, fn?: function }`, errors))
+        throw new GraphQLError(`[graphql-tools-types] ` +
+            `invalid parameters: {errors.join("; ")}`, [])
     const validate = (value, ast = null) => {
         if (options.min !== undefined && value < options.min)
             throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
@@ -102,6 +111,10 @@ const ResolverInt = (options = {}) => {
 
 /*  Float resolver for GraphQL Tools  */
 const ResolverFloat = (options = {}) => {
+    let errors = []
+    if (!Ducky.validate(options, `{ name: string, min?: number, max?: number, fn?: function }`, errors))
+        throw new GraphQLError(`[graphql-tools-types] ` +
+            `invalid parameters: {errors.join("; ")}`, [])
     const validate = (value, ast) => {
         if (options.min !== undefined && value < options.min)
             throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
@@ -144,6 +157,10 @@ const ResolverFloat = (options = {}) => {
 
 /*  String resolver for GraphQL Tools  */
 const ResolverString = (options = {}) => {
+    let errors = []
+    if (!Ducky.validate(options, `{ name: string, min?: number, max?: number, regex?: RegExp, fn?: function }`, errors))
+        throw new GraphQLError(`[graphql-tools-types] ` +
+            `invalid parameters: {errors.join("; ")}`, [])
     const validate = (value, ast = null) => {
         if (options.min !== undefined && value.length < options.min)
             throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
@@ -187,6 +204,10 @@ const ResolverString = (options = {}) => {
 
 /*  Date resolver for GraphQL Tools  */
 const ResolverDate = (options = {}) => {
+    let errors = []
+    if (!Ducky.validate(options, `{ name: string, min?: (string|Date), max?: (string|Date), fn?: function }`, errors))
+        throw new GraphQLError(`[graphql-tools-types] ` +
+            `invalid parameters: {errors.join("; ")}`, [])
     if (typeof options.min === "string")
         options.min = new Date(options.min)
     if (typeof options.max === "string")
@@ -243,6 +264,10 @@ const ResolverDate = (options = {}) => {
 
 /*  UUID resolver for GraphQL Tools  */
 const ResolverUUID = (options = {}) => {
+    let errors = []
+    if (!Ducky.validate(options, `{ name: string, storage?: string, fn?: function }`, errors))
+        throw new GraphQLError(`[graphql-tools-types] ` +
+            `invalid parameters: {errors.join("; ")}`, [])
     if (options.storage === undefined)
         options.storage = "binary"
     const validate = (value, ast = null) => {
@@ -297,6 +322,10 @@ const ResolverUUID = (options = {}) => {
 
 /*  JSON resolver for GraphQL Tools  */
 const ResolverJSON = (options = {}) => {
+    let errors = []
+    if (!Ducky.validate(options, `{ name: string }`, errors))
+        throw new GraphQLError(`[graphql-tools-types] ` +
+            `invalid parameters: {errors.join("; ")}`, [])
     return {
         /*  serialize value sent as output to the client  */
         __serialize: (value) => {
