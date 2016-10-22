@@ -205,9 +205,11 @@ const ResolverString = (options = {}) => {
 /*  Date resolver for GraphQL Tools  */
 const ResolverDate = (options = {}) => {
     let errors = []
-    if (!Ducky.validate(options, `{ name: string, min?: (string|Date), max?: (string|Date), fn?: function }`, errors))
+    if (!Ducky.validate(options, `{ name: string, serialization?: string, min?: (string|Date), max?: (string|Date), fn?: function }`, errors))
         throw new GraphQLError(`[graphql-tools-types] ` +
             `invalid parameters: {errors.join("; ")}`, [])
+    if (options.serialization === undefined)
+        options.serialization = "string"
     if (typeof options.min === "string")
         options.min = new Date(options.min)
     if (typeof options.max === "string")
@@ -226,18 +228,20 @@ const ResolverDate = (options = {}) => {
     return {
         /*  serialize value sent as output to the client  */
         __serialize: (value) => {
-            return value.toISOString()
+            return (options.serialization === "string" ? value.toISOString() : value.getTime())
         },
 
         /*  parse value received as input from client  */
         __parseValue: (value) => {
-            if (typeof value === "string") {
+            if (typeof value === "string" || typeof value === "number") {
                 value = new Date(value)
                 if (isNaN(value.getTime()))
                     throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                         `invalid Date input value`, [])
                 validate(value)
                 return value
+            }
+            else if (typeof value === "number") {
             }
             else if (typeof value === "object" && value instanceof Date)
                 return value
@@ -248,14 +252,18 @@ const ResolverDate = (options = {}) => {
 
         /*  parse value received as literal in AST  */
         __parseLiteral: (ast) => {
-            if (ast.kind !== GraphQLLanguage.Kind.STRING)
+            let value
+            if (ast.kind === GraphQLLanguage.Kind.STRING)
+                value = GraphQL.GraphQLString.parseLiteral(ast)
+            else if (ast.kind === GraphQLLanguage.Kind.INT)
+                value = GraphQL.GraphQLInt.parseLiteral(ast)
+            else
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
-                    `invalid Date literal (string expected)`, [ ast ])
-            let value = GraphQL.GraphQLString.parseLiteral(ast)
+                    `invalid Date literal (string or number expected)`, [ ast ])
             value = new Date(value)
             if (isNaN(value.getTime()))
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
-                    `invalid Date input value`, [])
+                    `invalid Date literal (date within valid range expected)`, [])
             validate(value, ast)
             return value
         }
