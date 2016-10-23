@@ -391,12 +391,12 @@ const ResolverJSON = (options = {}) => {
 
 /*  export the methods  */
 module.exports = {
-    ResolverVoid:   ResolverVoid,
-    ResolverInt:    ResolverInt,
-    ResolverFloat:  ResolverFloat,
-    ResolverString: ResolverString,
-    ResolverDate:   ResolverDate,
-    ResolverUUID:   ResolverUUID,
-    ResolverJSON:   ResolverJSON
+    Void:   ResolverVoid,
+    Int:    ResolverInt,
+    Float:  ResolverFloat,
+    String: ResolverString,
+    Date:   ResolverDate,
+    UUID:   ResolverUUID,
+    JSON:   ResolverJSON
 }
 
