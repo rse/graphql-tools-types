@@ -26,13 +26,13 @@ let definition = `
     }
 `
 let resolvers = {
-    Void:     GraphQLToolsTypes.ResolverVoid({ name: "MyVoid" }),
-    MyInt:    GraphQLToolsTypes.ResolverInt({ name: "MyInt", min: 0, max: 100 }),
-    MyFloat:  GraphQLToolsTypes.ResolverFloat({ name: "MyFloat", min: 0.0, max: 100.0 }),
-    MyString: GraphQLToolsTypes.ResolverString({ name: "MyString", regex: /^(?:foo|bar|quux)$/ }),
-    Date:     GraphQLToolsTypes.ResolverDate({ name: "MyDate" }),
-    UUID:     GraphQLToolsTypes.ResolverUUID({ name: "MyUUID" }),
-    JSON:     GraphQLToolsTypes.ResolverJSON({ name: "MyJSON" }),
+    Void:     GraphQLToolsTypes.Void({ name: "MyVoid" }),
+    MyInt:    GraphQLToolsTypes.Int({ name: "MyInt", min: 0, max: 100 }),
+    MyFloat:  GraphQLToolsTypes.Float({ name: "MyFloat", min: 0.0, max: 100.0 }),
+    MyString: GraphQLToolsTypes.String({ name: "MyString", regex: /^(?:foo|bar|quux)$/ }),
+    Date:     GraphQLToolsTypes.Date({ name: "MyDate" }),
+    UUID:     GraphQLToolsTypes.UUID({ name: "MyUUID" }),
+    JSON:     GraphQLToolsTypes.JSON({ name: "MyJSON" }),
     RootQuery: {
         exampleVoid: (root, args, ctx, info) => {
             return {}
