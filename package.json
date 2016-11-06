@@ -25,10 +25,10 @@
         "graphql":              "~0.7.2"
     },
     "devDependencies": {
-        "graphql-tools":        "~0.7.2",
+        "graphql-tools":        "~0.8.0",
         "jshint":               "~2.9.4",
-        "babel-cli":            "~6.16.0",
-        "babel-preset-es2015":  "~6.16.0"
+        "babel-cli":            "~6.18.0",
+        "babel-preset-es2015":  "~6.18.0"
     },
     "scripts": {
         "test": "jshint --config jshint.json graphql-tools-types.js && babel-node --presets es2015 test.js",
