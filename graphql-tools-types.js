@@ -331,7 +331,7 @@ const ResolverUUID = (options = {}) => {
 /*  JSON resolver for GraphQL Tools  */
 const ResolverJSON = (options = {}) => {
     let errors = []
-    if (!Ducky.validate(options, `{ name: string }`, errors))
+    if (!Ducky.validate(options, `{ name: string, struct?: string }`, errors))
         throw new GraphQLError(`[graphql-tools-types] ` +
             `invalid parameters: {errors.join("; ")}`, [])
     return {
@@ -343,7 +343,13 @@ const ResolverJSON = (options = {}) => {
 
         /*  parse value received as input from client  */
         __parseValue: (value) => {
-            /*  no-op as JSON is native input format  */
+            /*  no-op (except for structure validation) as JSON is native input format  */
+            if (options.struct !== undefined) {
+                let errors = []
+                if (!Ducky.validate(value, options.struct, errors))
+                    throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                        `unexpected JSON structure: {errors.join("; ")}`, [])
+            }
             return value
         },
 
@@ -383,6 +389,12 @@ const ResolverJSON = (options = {}) => {
             catch (ex) {
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                     `error parsing JSON: ${ex.toString()}`, [ ast ])
+            }
+            if (options.struct !== undefined) {
+                let errors = []
+                if (!Ducky.validate(result, options.struct, errors))
+                    throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                        `unexpected JSON structure: {errors.join("; ")}`, [])
             }
             return result
         }
