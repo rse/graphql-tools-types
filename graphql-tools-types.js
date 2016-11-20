@@ -241,8 +241,6 @@ const ResolverDate = (options = {}) => {
                 validate(value)
                 return value
             }
-            else if (typeof value === "number") {
-            }
             else if (typeof value === "object" && value instanceof Date)
                 return value
             else
