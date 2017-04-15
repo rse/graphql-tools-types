@@ -1,5 +1,5 @@
 ##
-##  GraphQL-Tools-Types -- Custom Types for GraphQL-Tools
+##  GraphQL-Tools-Types -- Custom Scalar Types for GraphQL-Tools
 ##  Copyright (c) 2016-2017 Ralf S. Engelschall <rse@engelschall.com>
 ##
 ##  Permission is hereby granted, free of charge, to any person obtaining
