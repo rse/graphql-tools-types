@@ -2,7 +2,7 @@
 GraphQL-Tools-Types
 ===================
 
-Custom Types for GraphQL-Tools
+Custom Scalar Types for GraphQL-Tools
 
 <p/>
 <img src="https://nodei.co/npm/graphql-tools-types.png?downloads=true&stars=true" alt=""/>
@@ -13,12 +13,12 @@ Custom Types for GraphQL-Tools
 About
 -----
 
-This Node.js module provides the custom types JavaScript Object
-Notation (JSON), Universally Unique Identifier (UUID) and Date for
+This Node.js module provides the custom scalar types Void, Integer, Float,
+String, Date, Universally Unique Identifier (UUID) and
+JavaScript Object Notation (JSON) for
 [GraphQL Tools](https://github.com/apollostack/graphql-tools),
-a collection of handy tools on top of
-[GraphQL.js](https://github.com/graphql/graphql-js) for manipulating
-[GraphQL](http://graphql.org/) schemas.
+a wrapper around the [GraphQL](http://graphql.org/) engine
+[GraphQL.js](https://github.com/graphql/graphql-js).
 
 Installation
 ------------
