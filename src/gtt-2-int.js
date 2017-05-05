@@ -53,11 +53,16 @@ export default function ResolverInt (options = {}) {
 
         /*  parse value received as input from client  */
         __parseValue: (value) => {
-            if (typeof value === "string")
+            if (typeof value === "string") {
+                let re = /^[+-]?\d+$/
+                if (!re.test(value))
+                    throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
+                        `invalid input value (matching regular expression "${re}" expected)`, [])
                 value = parseInt(value, 10)
+            }
             else if (typeof value !== "number")
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
-                    "invalid input value (type \"number\" expected)", [])
+                    "invalid input value (type \"number\" or \"string\" expected)", [])
             validate(value)
             return value
         },

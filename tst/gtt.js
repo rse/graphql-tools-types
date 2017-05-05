@@ -90,11 +90,14 @@ let schema = GraphQLTools.makeExecutableSchema({
     resolvers: resolvers
 })
 let query = `
-    query ($date: Date, $uuid: UUID, $json: JSON, $coord: Coord) {
+    query ($int: MyInt, $float: MyFloat, $string: MyString, $date: Date, $uuid: UUID, $json: JSON, $coord: Coord) {
         exampleVoid,
-        exampleMyInt(num: 100),
-        exampleMyFloat(num: 42.7),
-        exampleMyString(str: "foo")
+        int1: exampleMyInt(num: $int),
+        int2: exampleMyInt(num: 100),
+        float1: exampleMyFloat(num: $float),
+        float2: exampleMyFloat(num: 42.7),
+        string1: exampleMyString(str: $string)
+        string2: exampleMyString(str: "foo")
         date1: exampleDate(date: $date),
         date2: exampleDate(date: "2016-08-16T00:01:02.000Z"),
         uuid1: exampleUUID(uuid: $uuid),
@@ -106,10 +109,13 @@ let query = `
     }
 `
 let variables = {
-    date: "2016-08-16T00:01:02.000Z",
-    uuid: "6cbe657c-63e3-11e6-aa83-080027e303e4",
-    json: { foo: "bar", baz: 42, quux: true },
-    coord: { x: 7, y: 42 }
+    int:    100,
+    float:  42.7,
+    string: "foo",
+    date:   "2016-08-16T00:01:02.000Z",
+    uuid:   "6cbe657c-63e3-11e6-aa83-080027e303e4",
+    json:   { foo: "bar", baz: 42, quux: true },
+    coord:  { x: 7, y: 42 }
 }
 GraphQL.graphql(schema, query, null, null, variables).then((result) => {
     /* eslint no-console: off */
