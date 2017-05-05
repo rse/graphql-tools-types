@@ -1,6 +1,6 @@
 {
     "name":        "graphql-tools-types",
-    "version":     "1.1.1",
+    "version":     "1.1.2",
     "description": "Custom Types for GraphQL-Tools",
     "keywords":    [ "graphql", "graphql-tools", "custom", "types", "json", "uuid" ],
     "main":        "./lib/gtt.js",
