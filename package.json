@@ -20,9 +20,9 @@
     "homepage": "https://github.com/rse/graphql-tools-types",
     "bugs":     "https://github.com/rse/graphql-tools-types/issues",
     "dependencies": {
-        "ducky":                                     "~2.5.1",
+        "ducky":                                     "~2.5.2",
         "pure-uuid":                                 "~1.4.5",
-        "graphql":                                   "~0.9.3",
+        "graphql":                                   "~0.9.6",
         "babel-runtime":                             "~6.23.0"
     },
     "devDependencies": {
@@ -34,7 +34,7 @@
         "grunt-babel":                               "~6.0.0",
         "grunt-mocha-test":                          "~0.13.2",
         "grunt-eslint":                              "~19.0.0",
-        "babel-eslint":                              "~7.2.2",
+        "babel-eslint":                              "~7.2.3",
         "eslint":                                    "~3.19.0",
         "eslint-config-standard":                    "~10.2.1",
         "eslint-plugin-standard":                    "~3.0.1",
@@ -48,7 +48,7 @@
         "babel-preset-stage-3":                      "~6.24.1",
         "babel-preset-stage-2":                      "~6.24.1",
         "babel-plugin-transform-runtime":            "~6.23.0",
-        "mocha":                                     "~3.2.0",
+        "mocha":                                     "~3.3.0",
         "chai":                                      "~3.5.0"
     },
     "engines": {
