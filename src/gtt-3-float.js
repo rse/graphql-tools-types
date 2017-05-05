@@ -34,7 +34,7 @@ export default function ResolverFloat (options = {}) {
     if (!Ducky.validate(options, "{ name: string, min?: number, max?: number, fn?: function }", errors))
         throw new GraphQLError("[graphql-tools-types] " +
             `invalid parameters: ${errors.join("; ")}`, [])
-    const validate = (value, ast) => {
+    const validate = (value, ast = null) => {
         if (options.min !== undefined && value < options.min)
             throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                 `minimum value is ${options.min}`, ast !== null ? [ ast ] : [])
