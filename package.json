@@ -55,8 +55,8 @@
         "node":                                      ">=6.0.0"
     },
     "scripts": {
-        "prepublish":  "grunt default",
-        "build":       "grunt default",
-        "test":        "babel-node --presets es2015,es2016,es2017 tst/gtt.js"
+        "prepublishOnly":  "grunt default",
+        "build":           "grunt default",
+        "test":            "babel-node --presets es2015,es2016,es2017 tst/gtt.js"
     }
 }
