@@ -4,6 +4,7 @@
     "description": "Custom Types for GraphQL-Tools",
     "keywords":    [ "graphql", "graphql-tools", "custom", "types", "json", "uuid" ],
     "main":        "./lib/gtt.js",
+    "license":     "MIT",
     "repository": {
         "type": "git",
         "url":  "https://github.com/rse/graphql-tools-types.git"
@@ -13,10 +14,6 @@
         "email": "rse@engelschall.com",
         "url":   "http://engelschall.com"
     },
-    "licenses": [{
-        "type": "MIT",
-        "url":  "http://opensource.org/licenses/MIT"
-    }],
     "homepage": "https://github.com/rse/graphql-tools-types",
     "bugs":     "https://github.com/rse/graphql-tools-types/issues",
     "dependencies": {
