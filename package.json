@@ -20,7 +20,7 @@
         "ducky":                                     "~2.6.1",
         "pure-uuid":                                 "~1.4.7",
         "graphql":                                   "~0.10.5",
-        "babel-runtime":                             "~6.23.0"
+        "babel-runtime":                             "~6.25.0"
     },
     "devDependencies": {
         "graphql-tools":                             "~1.1.0",
@@ -32,7 +32,7 @@
         "grunt-mocha-test":                          "~0.13.2",
         "grunt-eslint":                              "~20.0.0",
         "babel-eslint":                              "~7.2.3",
-        "eslint":                                    "~4.2.0",
+        "eslint":                                    "~4.3.0",
         "eslint-config-standard":                    "~10.2.1",
         "eslint-plugin-standard":                    "~3.0.1",
         "eslint-plugin-promise":                     "~3.5.0",
