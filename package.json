@@ -23,7 +23,7 @@
         "babel-runtime":                             "6.26.0"
     },
     "devDependencies": {
-        "graphql-tools":                             "2.23.1",
+        "graphql-tools":                             "2.24.0",
         "grunt":                                     "1.0.2",
         "grunt-cli":                                 "1.2.0",
         "grunt-contrib-clean":                       "1.1.0",
