@@ -18,12 +18,12 @@
     "bugs":     "https://github.com/rse/graphql-tools-types/issues",
     "dependencies": {
         "ducky":                                     "2.6.11",
-        "pure-uuid":                                 "1.5.2",
+        "pure-uuid":                                 "1.5.3",
         "graphql":                                   "0.13.2",
         "babel-runtime":                             "6.26.0"
     },
     "devDependencies": {
-        "graphql-tools":                             "3.0.2",
+        "graphql-tools":                             "3.0.4",
         "grunt":                                     "1.0.3",
         "grunt-cli":                                 "1.2.0",
         "grunt-contrib-clean":                       "1.1.0",
@@ -34,11 +34,11 @@
         "babel-eslint":                              "8.2.5",
         "babel-core":                                "6.26.3",
         "babel-cli":                                 "6.26.0",
-        "eslint":                                    "5.0.0",
+        "eslint":                                    "5.0.1",
         "eslint-config-standard":                    "11.0.0",
         "eslint-plugin-standard":                    "3.1.0",
         "eslint-plugin-promise":                     "3.8.0",
-        "eslint-plugin-import":                      "2.12.0",
+        "eslint-plugin-import":                      "2.13.0",
         "eslint-plugin-node":                        "6.0.1",
         "babel-preset-env":                          "1.7.0",
         "babel-preset-stage-3":                      "6.24.1",
