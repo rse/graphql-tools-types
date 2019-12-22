@@ -30,7 +30,7 @@ import { GraphQLError }     from "graphql/error"
 
 /*  JSON resolver for GraphQL Tools  */
 export default function ResolverJSON (options = {}) {
-    let errors = []
+    const errors = []
     if (!Ducky.validate(options, "{ name: string, struct?: string }", errors))
         throw new GraphQLError("[graphql-tools-types] " +
             `invalid parameters: ${errors.join("; ")}`, [])
@@ -45,7 +45,7 @@ export default function ResolverJSON (options = {}) {
         __parseValue: (value) => {
             /*  no-op (except for structure validation) as JSON is native input format  */
             if (options.struct !== undefined) {
-                let errors = []
+                const errors = []
                 if (!Ducky.validate(value, options.struct, errors))
                     throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                         `unexpected JSON structure: ${errors.join("; ")}`, [])
@@ -91,7 +91,7 @@ export default function ResolverJSON (options = {}) {
                     `error parsing JSON: ${ex.toString()}`, [ ast ])
             }
             if (options.struct !== undefined) {
-                let errors = []
+                const errors = []
                 if (!Ducky.validate(result, options.struct, errors))
                     throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                         `unexpected JSON structure: ${errors.join("; ")}`, [])

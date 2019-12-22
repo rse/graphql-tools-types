@@ -29,7 +29,7 @@ import { GraphQLError }     from "graphql/error"
 
 /*  Void resolver for GraphQL Tools  */
 export default function ResolverVoid (options = {}) {
-    let errors = []
+    const errors = []
     if (!Ducky.validate(options, "{ name: string, value?: any }", errors))
         throw new GraphQLError("[graphql-tools-types] " +
             `invalid parameters: ${errors.join("; ")}`, [])
@@ -55,7 +55,7 @@ export default function ResolverVoid (options = {}) {
             if (ast.kind !== GraphQLLanguage.Kind.OBJECT)
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                     "invalid Void literal (object expected)", [ ast ])
-            let value = options.value
+            const value = options.value
             return value
         }
     }

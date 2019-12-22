@@ -30,7 +30,7 @@ import { GraphQLError }     from "graphql/error"
 
 /*  Integer resolver for GraphQL Tools  */
 export default function ResolverInt (options = {}) {
-    let errors = []
+    const errors = []
     if (!Ducky.validate(options, "{ name: string, min?: number, max?: number, fn?: function }", errors))
         throw new GraphQLError("[graphql-tools-types] " +
             `invalid parameters: ${errors.join("; ")}`, [])
@@ -54,7 +54,7 @@ export default function ResolverInt (options = {}) {
         /*  parse value received as input from client  */
         __parseValue: (value) => {
             if (typeof value === "string") {
-                let re = /^[+-]?\d+$/
+                const re = /^[+-]?\d+$/
                 if (!re.test(value))
                     throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                         `invalid input value (matching regular expression "${re}" expected)`, [])
@@ -72,7 +72,7 @@ export default function ResolverInt (options = {}) {
             if (ast.kind !== GraphQLLanguage.Kind.INT)
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                     "invalid AST node (kind \"INT\" expected)", [ ast ])
-            let value = GraphQL.GraphQLInt.parseLiteral(ast)
+            const value = GraphQL.GraphQLInt.parseLiteral(ast)
             validate(value, ast)
             return value
         }

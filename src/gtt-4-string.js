@@ -30,7 +30,7 @@ import { GraphQLError }     from "graphql/error"
 
 /*  String resolver for GraphQL Tools  */
 export default function ResolverString (options = {}) {
-    let errors = []
+    const errors = []
     if (!Ducky.validate(options, "{ name: string, min?: number, max?: number, regex?: RegExp, fn?: function }", errors))
         throw new GraphQLError("[graphql-tools-types] " +
             `invalid parameters: ${errors.join("; ")}`, [])
@@ -68,7 +68,7 @@ export default function ResolverString (options = {}) {
             if (ast.kind !== GraphQLLanguage.Kind.STRING)
                 throw new GraphQLError(`[graphql-tools-types] ${options.name}: ` +
                     "invalid AST node (kind \"STRING\" expected)", [ ast ])
-            let value = GraphQL.GraphQLString.parseLiteral(ast)
+            const value = GraphQL.GraphQLString.parseLiteral(ast)
             validate(value, ast)
             return value
         }

@@ -26,7 +26,7 @@ import * as GraphQL      from "graphql"
 import * as GraphQLTools from "graphql-tools"
 import GraphQLToolsTypes from "../lib/gtt.js"
 
-let definition = `
+const definition = `
     schema {
         query: RootQuery
     }
@@ -49,7 +49,7 @@ let definition = `
         exampleCoord(coord: Coord): Coord
     }
 `
-let resolvers = {
+const resolvers = {
     Void:     GraphQLToolsTypes.Void({ name: "MyVoid" }),
     MyInt:    GraphQLToolsTypes.Int({ name: "MyInt", min: 0, max: 100 }),
     MyFloat:  GraphQLToolsTypes.Float({ name: "MyFloat", min: 0.0, max: 100.0 }),
@@ -85,11 +85,11 @@ let resolvers = {
         }
     }
 }
-let schema = GraphQLTools.makeExecutableSchema({
+const schema = GraphQLTools.makeExecutableSchema({
     typeDefs: [ definition ],
     resolvers: resolvers
 })
-let query = `
+const query = `
     query ($int: MyInt, $float: MyFloat, $string: MyString, $date: Date, $uuid: UUID, $json: JSON, $coord: Coord) {
         exampleVoid,
         int1: exampleMyInt(num: $int),
@@ -108,7 +108,7 @@ let query = `
         coord2: exampleCoord(coord: { x: 7, y: 42 })
     }
 `
-let variables = {
+const variables = {
     int:    100,
     float:  42.7,
     string: "foo",

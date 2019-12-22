@@ -31,7 +31,7 @@ import { GraphQLError }     from "graphql/error"
 
 /*  UUID resolver for GraphQL Tools  */
 export default function ResolverUUID (options = {}) {
-    let errors = []
+    const errors = []
     if (!Ducky.validate(options, "{ name: string, storage?: string, fn?: function }", errors))
         throw new GraphQLError("[graphql-tools-types] " +
             `invalid parameters: ${errors.join("; ")}`, [])

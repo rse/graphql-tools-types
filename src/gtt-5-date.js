@@ -30,7 +30,7 @@ import { GraphQLError }     from "graphql/error"
 
 /*  Date resolver for GraphQL Tools  */
 export default function ResolverDate (options = {}) {
-    let errors = []
+    const errors = []
     if (!Ducky.validate(options, "{ name: string, serialization?: string, min?: (string|Date), max?: (string|Date), fn?: function }", errors))
         throw new GraphQLError("[graphql-tools-types] " +
             `invalid parameters: ${errors.join("; ")}`, [])
