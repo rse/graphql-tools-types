@@ -51,13 +51,13 @@ module.exports = function (grunt) {
                     presets: [
                         [ "@babel/preset-env", {
                             "targets": {
-                                "node": "8.0.0"
+                                "node": "10.0.0"
                             }
                         } ]
                     ],
                     plugins: [
                         [ "@babel/plugin-transform-runtime", {
-                            "corejs":      2,
+                            "corejs":      3,
                             "helpers":     true,
                             "regenerator": false
                         } ]
