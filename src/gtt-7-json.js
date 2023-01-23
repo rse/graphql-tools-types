@@ -54,21 +54,23 @@ export default function ResolverJSON (options = {}) {
         },
 
         /*  parse value received as literal in AST  */
-        __parseLiteral: (ast) => {
+        __parseLiteral: (ast, variables) => {
             let result
             try {
                 const parseJSONLiteral = (ast) => {
                     switch (ast.kind) {
                         case GraphQLLanguage.Kind.BOOLEAN:
-                            return GraphQL.GraphQLBoolean.parseLiteral(ast)
+                            return GraphQL.GraphQLBoolean.parseLiteral(ast, variables)
                         case GraphQLLanguage.Kind.INT:
-                            return GraphQL.GraphQLInt.parseLiteral(ast)
+                            return GraphQL.GraphQLInt.parseLiteral(ast, variables)
                         case GraphQLLanguage.Kind.STRING:
-                            return GraphQL.GraphQLString.parseLiteral(ast)
+                            return GraphQL.GraphQLString.parseLiteral(ast, variables)
                         case GraphQLLanguage.Kind.FLOAT:
-                            return GraphQL.GraphQLFloat.parseLiteral(ast)
+                            return GraphQL.GraphQLFloat.parseLiteral(ast, variables)
                         case GraphQLLanguage.Kind.ENUM:
                             return String(ast.value)
+                        case GraphQLLanguage.Kind.VARIABLE:
+                            return variables ? variables[ast.name.value] : ""
                         case GraphQLLanguage.Kind.LIST:
                             return ast.values.map((astItem) => {
                                 return parseJSONLiteral(astItem) /* RECURSION */
