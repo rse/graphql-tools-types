@@ -32,7 +32,7 @@
         "grunt-mocha-test":                          "0.13.3",
         "grunt-eslint":                              "23.0.0",
         "babel-eslint":                              "10.1.0",
-        "@babel/core":                               "7.12.10",
+        "@babel/core":                               "7.29.6",
         "@babel/node":                               "7.12.10",
         "eslint":                                    "7.17.0",
         "eslint-config-standard":                    "16.0.2",
